@@ -71,7 +71,7 @@ function RouteComponent() {
 
 	if (workspaces.length === 0) {
 		return (
-			<div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+			<div className="flex flex-col items-center justify-center h-[calc(100vh-8rem)] space-y-4">
 				<div className="text-center">
 					<FolderIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
 					<h2 className="text-2xl font-semibold mb-2">No workspaces yet</h2>
