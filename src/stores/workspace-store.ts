@@ -1,9 +1,4 @@
-import {
-	type Workspace,
-	WorkspaceApp,
-	WorkspaceStatus,
-	type WorkspaceStore,
-} from "@/types/workspace";
+import type { Workspace, WorkspaceStore } from "@/types/workspace";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { toast } from "sonner";
