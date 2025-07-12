@@ -1,3 +1,17 @@
+import { Link } from "@tanstack/react-router"
+import {
+  EditIcon,
+  FolderIcon,
+  InfoIcon,
+  Monitor,
+  MoreVerticalIcon,
+  PlayIcon,
+  PlusIcon,
+  SettingsIcon,
+  Trash2Icon,
+} from "lucide-react"
+import { useCallback, useState } from "react"
+import { useTheme } from "@/components/theme-provider"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,21 +43,10 @@ import {
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 import { useWorkspaceStore } from "@/stores/workspace-store"
-import { Link } from "@tanstack/react-router"
-import {
-  EditIcon,
-  FolderIcon,
-  InfoIcon,
-  MoreVerticalIcon,
-  PlayIcon,
-  PlusIcon,
-  SettingsIcon,
-  Trash2Icon,
-} from "lucide-react"
-import { useState } from "react"
 
 export function AppSidebar() {
   const { workspaces, launchWorkspace, deleteWorkspace } = useWorkspaceStore()
+  const { theme, setTheme } = useTheme()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [workspaceToDelete, setWorkspaceToDelete] = useState<string | null>(
     null,
@@ -61,6 +64,14 @@ export function AppSidebar() {
       setWorkspaceToDelete(null)
     }
   }
+
+  const toggleTheme = useCallback(() => {
+    if (theme === "system") {
+      setTheme("light")
+    } else {
+      setTheme(theme === "dark" ? "light" : "dark")
+    }
+  }, [theme, setTheme])
 
   return (
     <Sidebar>
@@ -174,6 +185,13 @@ export function AppSidebar() {
                 <InfoIcon className="h-4 w-4" />
                 About
               </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={toggleTheme} className="group/toggle">
+              <Monitor className="h-4 w-4" />
+              Toggle Theme
+              <span className="sr-only">Toggle theme</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
