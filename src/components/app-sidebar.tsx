@@ -73,10 +73,10 @@ export function AppSidebar() {
 	return (
 		<Sidebar>
 			<SidebarHeader className="border-b">
-				<div className="flex items-center gap-2 px-4 py-2">
+				<Link to="/" className="flex items-center gap-2 px-4 py-2">
 					<FolderIcon className="h-6 w-6" />
 					<h1 className="text-lg font-semibold">Workspace Launcher</h1>
-				</div>
+				</Link>
 			</SidebarHeader>
 
 			<SidebarContent>

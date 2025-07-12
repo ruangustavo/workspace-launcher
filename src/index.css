@@ -111,6 +111,10 @@
 }
 
 @layer base {
+  html {
+    font-family: "Inter", sans-serif;
+    @apply antialiased;
+  }
   * {
     @apply border-border outline-ring/50;
   }
