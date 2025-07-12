@@ -17,10 +17,11 @@ import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import {
+	ArrowDownIcon,
 	ArrowLeftIcon,
 	ArrowRightIcon,
+	ArrowUpIcon,
 	FileIcon,
-	GripVerticalIcon,
 	PlusIcon,
 	TrashIcon,
 } from "lucide-react";
@@ -283,7 +284,6 @@ function RouteComponent() {
 							<div key={app.id} className="border rounded-lg p-4 space-y-3">
 								<div className="flex items-center justify-between">
 									<div className="flex items-center gap-2">
-										<GripVerticalIcon className="h-4 w-4 text-muted-foreground" />
 										<FileIcon className="h-4 w-4" />
 										<span className="font-medium">{app.name}</span>
 									</div>
@@ -294,7 +294,7 @@ function RouteComponent() {
 											onClick={() => handleMoveApp(app.id, "up")}
 											disabled={index === 0}
 										>
-											↑
+											<ArrowUpIcon className="size-4" />
 										</Button>
 										<Button
 											variant="ghost"
@@ -302,7 +302,7 @@ function RouteComponent() {
 											onClick={() => handleMoveApp(app.id, "down")}
 											disabled={index === formData.apps.length - 1}
 										>
-											↓
+											<ArrowDownIcon className="size-4" />
 										</Button>
 										<Button
 											variant="ghost"

@@ -12,16 +12,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/stores/workspace-store";
 import type { WorkspaceApp } from "@/types/workspace";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import {
+	ArrowDownIcon,
 	ArrowLeftIcon,
 	ArrowRightIcon,
+	ArrowUpIcon,
 	FileIcon,
-	GripVerticalIcon,
 	InfoIcon,
 	PlusIcon,
 	TrashIcon,
@@ -219,35 +221,38 @@ function RouteComponent() {
 	const renderStepIndicator = () => (
 		<div className="flex items-center space-x-2 mb-6">
 			<div
-				className={`flex items-center justify-center w-8 h-8 rounded-full ${
+				className={cn(
+					"flex items-center justify-center w-8 h-8 rounded-full",
 					currentStep >= 1
 						? "bg-primary text-primary-foreground"
-						: "bg-muted text-muted-foreground"
-				}`}
+						: "bg-muted text-muted-foreground",
+				)}
 			>
 				1
 			</div>
 			<div
-				className={`h-1 w-8 ${currentStep >= 2 ? "bg-primary" : "bg-muted"}`}
+				className={cn("h-1 w-8", currentStep >= 2 ? "bg-primary" : "bg-muted")}
 			/>
 			<div
-				className={`flex items-center justify-center w-8 h-8 rounded-full ${
+				className={cn(
+					"flex items-center justify-center w-8 h-8 rounded-full",
 					currentStep >= 2
 						? "bg-primary text-primary-foreground"
-						: "bg-muted text-muted-foreground"
-				}`}
+						: "bg-muted text-muted-foreground",
+				)}
 			>
 				2
 			</div>
 			<div
-				className={`h-1 w-8 ${currentStep >= 3 ? "bg-primary" : "bg-muted"}`}
+				className={cn("h-1 w-8", currentStep >= 3 ? "bg-primary" : "bg-muted")}
 			/>
 			<div
-				className={`flex items-center justify-center w-8 h-8 rounded-full ${
+				className={cn(
+					"flex items-center justify-center w-8 h-8 rounded-full",
 					currentStep >= 3
 						? "bg-primary text-primary-foreground"
-						: "bg-muted text-muted-foreground"
-				}`}
+						: "bg-muted text-muted-foreground",
+				)}
 			>
 				3
 			</div>
@@ -331,7 +336,6 @@ function RouteComponent() {
 							<div key={app.id} className="border rounded-lg p-4 space-y-3">
 								<div className="flex items-center justify-between">
 									<div className="flex items-center gap-2">
-										<GripVerticalIcon className="h-4 w-4 text-muted-foreground" />
 										<FileIcon className="h-4 w-4" />
 										<span className="font-medium">{app.name}</span>
 									</div>
@@ -342,7 +346,7 @@ function RouteComponent() {
 											onClick={() => handleMoveApp(app.id, "up")}
 											disabled={index === 0}
 										>
-											↑
+											<ArrowUpIcon className="size-4" />
 										</Button>
 										<Button
 											variant="ghost"
@@ -350,7 +354,7 @@ function RouteComponent() {
 											onClick={() => handleMoveApp(app.id, "down")}
 											disabled={index === formData.apps.length - 1}
 										>
-											↓
+											<ArrowDownIcon className="size-4" />
 										</Button>
 										<Button
 											variant="ghost"
