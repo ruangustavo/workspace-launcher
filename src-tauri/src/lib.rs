@@ -1,7 +1,5 @@
 use std::process::Command;
-use std::thread;
-use std::time::Duration;
-use tauri::{AppHandle, Manager, Emitter};
+use tauri::AppHandle;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -10,7 +8,6 @@ pub struct WorkspaceApp {
     pub name: String,
     pub path: String,
     pub args: Option<String>,
-    pub delay: Option<u64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -22,10 +19,6 @@ pub struct LaunchResult {
 
 #[tauri::command]
 async fn launch_app(app: WorkspaceApp) -> Result<LaunchResult, String> {
-    if let Some(delay) = app.delay {
-        thread::sleep(Duration::from_secs(delay));
-    }
-
     let mut cmd = Command::new(&app.path);
     
     if let Some(args) = &app.args {
@@ -50,17 +43,10 @@ async fn launch_app(app: WorkspaceApp) -> Result<LaunchResult, String> {
 }
 
 #[tauri::command]
-async fn launch_workspace_apps(apps: Vec<WorkspaceApp>, app_handle: AppHandle) -> Result<Vec<LaunchResult>, String> {
+async fn launch_workspace_apps(apps: Vec<WorkspaceApp>) -> Result<Vec<LaunchResult>, String> {
     let mut results = Vec::new();
     
-    for (index, app) in apps.iter().enumerate() {
-        let _ = app_handle.emit("workspace-launch-progress", serde_json::json!({
-            "current": index,
-            "total": apps.len(),
-            "app_name": app.name,
-            "app_id": app.id
-        }));
-
+    for app in apps.iter() {
         let result = launch_app(app.clone()).await;
         match result {
             Ok(launch_result) => {
@@ -75,10 +61,6 @@ async fn launch_workspace_apps(apps: Vec<WorkspaceApp>, app_handle: AppHandle) -
             }
         }
     }
-    
-    let _ = app_handle.emit("workspace-launch-complete", serde_json::json!({
-        "results": results
-    }));
     
     Ok(results)
 }

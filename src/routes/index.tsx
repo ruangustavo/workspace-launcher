@@ -8,7 +8,6 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
 	Card,
@@ -24,7 +23,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useWorkspaceStore } from "@/stores/workspace-store";
 import { Link, createFileRoute } from "@tanstack/react-router";
@@ -34,7 +32,6 @@ import {
 	MoreVerticalIcon,
 	PlayIcon,
 	PlusIcon,
-	StopCircleIcon,
 	Trash2Icon,
 } from "lucide-react";
 import { useState } from "react";
@@ -44,13 +41,7 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-	const {
-		workspaces,
-		workspaceStatuses,
-		launchWorkspace,
-		stopWorkspace,
-		deleteWorkspace,
-	} = useWorkspaceStore();
+	const { workspaces, launchWorkspace, deleteWorkspace } = useWorkspaceStore();
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 	const [workspaceToDelete, setWorkspaceToDelete] = useState<string | null>(
 		null,
@@ -110,13 +101,6 @@ function RouteComponent() {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				{workspaces.map((workspace) => {
-					const status = workspaceStatuses[workspace.id];
-					const isRunning = status?.isRunning || false;
-					const hasProgress = status?.launchProgress;
-					const progressPercentage = hasProgress
-						? Math.round((hasProgress.completed / hasProgress.total) * 100)
-						: 0;
-
 					return (
 						<Card key={workspace.id} className="flex flex-col">
 							<CardHeader className="pb-3">
@@ -132,11 +116,6 @@ function RouteComponent() {
 										)}
 									</div>
 									<div className="flex items-center gap-2">
-										{isRunning && (
-											<Badge variant="secondary" className="text-xs">
-												Running
-											</Badge>
-										)}
 										<DropdownMenu>
 											<DropdownMenuTrigger
 												className={cn(
@@ -179,19 +158,6 @@ function RouteComponent() {
 										{workspace.apps.length !== 1 ? "s" : ""}
 									</div>
 
-									{hasProgress && (
-										<div className="space-y-2">
-											<div className="flex justify-between text-sm">
-												<span>Launching...</span>
-												<span>{progressPercentage}%</span>
-											</div>
-											<Progress value={progressPercentage} className="h-2" />
-											<div className="text-xs text-muted-foreground">
-												{hasProgress.current}
-											</div>
-										</div>
-									)}
-
 									{workspace.apps.length > 0 && (
 										<div className="text-xs text-muted-foreground">
 											<div className="space-y-1">
@@ -211,28 +177,14 @@ function RouteComponent() {
 
 							<CardFooter className="pt-3">
 								<div className="flex gap-2 w-full">
-									{isRunning ? (
-										<Button
-											variant="outline"
-											size="sm"
-											onClick={() => stopWorkspace(workspace.id)}
-											className="flex-1"
-										>
-											<StopCircleIcon className="size-4" />
-											Stop
-										</Button>
-									) : (
-										<Button
-											size="sm"
-											onClick={() => launchWorkspace(workspace.id)}
-											variant="outline"
-											disabled={!!hasProgress}
-											className="flex-1"
-										>
-											<PlayIcon className="size-4" />
-											{hasProgress ? "Launching..." : "Launch"}
-										</Button>
-									)}
+									<Button
+										size="sm"
+										onClick={() => launchWorkspace(workspace.id)}
+										className="flex-1"
+									>
+										<PlayIcon className="size-4" />
+										Launch
+									</Button>
 								</div>
 							</CardFooter>
 						</Card>

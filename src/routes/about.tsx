@@ -54,7 +54,7 @@ function RouteComponent() {
 						<h3 className="font-semibold mb-2">Key Features</h3>
 						<ul className="list-disc list-inside text-muted-foreground space-y-1">
 							<li>Create custom workspaces with multiple applications</li>
-							<li>Configure launch delays and arguments for each app</li>
+							<li>Configure launch arguments for each app</li>
 							<li>Test launch functionality before saving</li>
 							<li>Modern, intuitive interface built with React and Tauri</li>
 							<li>Cross-platform support (Windows, macOS, Linux)</li>

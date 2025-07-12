@@ -126,7 +126,6 @@ function RouteComponent() {
 					name: appInfo.name,
 					path: appInfo.path,
 					args: "",
-					delay: 0,
 				};
 
 				setFormData((prev) => ({
@@ -187,7 +186,6 @@ function RouteComponent() {
 				name: app.name,
 				path: app.path,
 				args: app.args || null,
-				delay: app.delay || null,
 			}));
 
 			await invoke("launch_workspace_apps", { apps: tauriApps });
@@ -368,32 +366,16 @@ function RouteComponent() {
 									{app.path}
 								</div>
 
-								<div className="grid grid-cols-2 gap-3">
-									<div className="space-y-2">
-										<Label htmlFor={`args-${app.id}`}>Arguments</Label>
-										<Input
-											id={`args-${app.id}`}
-											value={app.args || ""}
-											onChange={(e) =>
-												handleAppUpdate(app.id, { args: e.target.value })
-											}
-											placeholder="--flag value"
-										/>
-									</div>
-									<div className="space-y-2">
-										<Label htmlFor={`delay-${app.id}`}>Delay (seconds)</Label>
-										<Input
-											id={`delay-${app.id}`}
-											type="number"
-											min="0"
-											value={app.delay || 0}
-											onChange={(e) =>
-												handleAppUpdate(app.id, {
-													delay: Number.parseInt(e.target.value) || 0,
-												})
-											}
-										/>
-									</div>
+								<div className="space-y-2">
+									<Label htmlFor={`args-${app.id}`}>Arguments</Label>
+									<Input
+										id={`args-${app.id}`}
+										value={app.args || ""}
+										onChange={(e) =>
+											handleAppUpdate(app.id, { args: e.target.value })
+										}
+										placeholder="--flag value"
+									/>
 								</div>
 							</div>
 						))}
@@ -465,9 +447,6 @@ function RouteComponent() {
 										{app.path}
 									</div>
 								</div>
-								{app.delay && app.delay > 0 && (
-									<Badge variant="secondary">{app.delay}s delay</Badge>
-								)}
 							</div>
 						))}
 					</div>

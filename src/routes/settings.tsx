@@ -43,7 +43,6 @@ function RouteComponent() {
 							<li>Hide window after launching workspace</li>
 							<li>Global keyboard shortcuts</li>
 							<li>Theme preferences</li>
-							<li>Default launch delays</li>
 						</ul>
 					</div>
 				</CardContent>

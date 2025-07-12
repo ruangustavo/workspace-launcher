@@ -8,7 +8,6 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -39,7 +38,6 @@ import {
 	PlayIcon,
 	PlusIcon,
 	SettingsIcon,
-	StopCircleIcon,
 	Trash2Icon,
 } from "lucide-react";
 import { useState } from "react";
@@ -47,9 +45,7 @@ import { useState } from "react";
 export function AppSidebar() {
 	const {
 		workspaces,
-		workspaceStatuses,
 		launchWorkspace,
-		stopWorkspace,
 		deleteWorkspace,
 	} = useWorkspaceStore();
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -85,10 +81,6 @@ export function AppSidebar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{workspaces.map((workspace) => {
-								const status = workspaceStatuses[workspace.id];
-								const isRunning = status?.isRunning || false;
-								const hasProgress = status?.launchProgress;
-
 								return (
 									<SidebarMenuItem key={workspace.id}>
 										<div className="flex items-center gap-2 w-full">
@@ -97,22 +89,11 @@ export function AppSidebar() {
 													<span className="text-sm font-medium truncate">
 														{workspace.name}
 													</span>
-													{isRunning && (
-														<Badge variant="secondary" className="text-xs">
-															Running
-														</Badge>
-													)}
 												</div>
 												{workspace.description && (
 													<p className="text-xs text-muted-foreground truncate">
 														{workspace.description}
 													</p>
-												)}
-												{hasProgress && (
-													<div className="text-xs text-muted-foreground">
-														{hasProgress.current} ({hasProgress.completed}/
-														{hasProgress.total})
-													</div>
 												)}
 											</div>
 
@@ -135,19 +116,11 @@ export function AppSidebar() {
 													>
 														<button
 															type="button"
-															disabled={isRunning || !!hasProgress}
 															className="w-full"
 														>
 															<PlayIcon className="size-4" />
 															Launch
 														</button>
-													</DropdownMenuItem>
-													<DropdownMenuItem
-														onClick={() => stopWorkspace(workspace.id)}
-														disabled={!isRunning}
-													>
-														<StopCircleIcon className="size-4" />
-														Stop
 													</DropdownMenuItem>
 													<DropdownMenuItem asChild>
 														<Link
