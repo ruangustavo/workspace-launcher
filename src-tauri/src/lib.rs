@@ -21,11 +21,6 @@ pub struct LaunchResult {
 }
 
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
-#[tauri::command]
 async fn launch_app(app: WorkspaceApp) -> Result<LaunchResult, String> {
     if let Some(delay) = app.delay {
         thread::sleep(Duration::from_secs(delay));
@@ -35,7 +30,6 @@ async fn launch_app(app: WorkspaceApp) -> Result<LaunchResult, String> {
     
     if let Some(args) = &app.args {
         if !args.is_empty() {
-            // Split args by spaces (simple implementation)
             let arg_parts: Vec<&str> = args.split_whitespace().collect();
             cmd.args(arg_parts);
         }
@@ -154,7 +148,6 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
-            greet,
             launch_app,
             launch_workspace_apps,
             get_app_info,
