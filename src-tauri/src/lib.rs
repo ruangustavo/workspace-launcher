@@ -20,7 +20,6 @@ pub struct LaunchResult {
     pub error: Option<String>,
 }
 
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
@@ -28,14 +27,12 @@ fn greet(name: &str) -> String {
 
 #[tauri::command]
 async fn launch_app(app: WorkspaceApp) -> Result<LaunchResult, String> {
-    // Add delay if specified
     if let Some(delay) = app.delay {
         thread::sleep(Duration::from_secs(delay));
     }
 
     let mut cmd = Command::new(&app.path);
     
-    // Add arguments if provided
     if let Some(args) = &app.args {
         if !args.is_empty() {
             // Split args by spaces (simple implementation)
@@ -63,7 +60,6 @@ async fn launch_workspace_apps(apps: Vec<WorkspaceApp>, app_handle: AppHandle) -
     let mut results = Vec::new();
     
     for (index, app) in apps.iter().enumerate() {
-        // Emit progress update
         let _ = app_handle.emit("workspace-launch-progress", serde_json::json!({
             "current": index,
             "total": apps.len(),
@@ -86,7 +82,6 @@ async fn launch_workspace_apps(apps: Vec<WorkspaceApp>, app_handle: AppHandle) -
         }
     }
     
-    // Emit completion
     let _ = app_handle.emit("workspace-launch-complete", serde_json::json!({
         "results": results
     }));
@@ -145,7 +140,7 @@ async fn load_workspaces_data(app_handle: AppHandle) -> Result<String, String> {
     let file_path = app_dir.join("workspaces").join("workspaces.json");
     
     if !file_path.exists() {
-        return Ok("[]".to_string()); // Return empty array if file doesn't exist
+        return Ok("[]".to_string());
     }
     
     fs::read_to_string(file_path)

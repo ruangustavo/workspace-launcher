@@ -24,7 +24,6 @@ export const useWorkspaceStore = create<WorkspaceStoreState>()(
 					const data = await invoke<string>("load_workspaces_data");
 					const workspaces = JSON.parse(data) as Workspace[];
 
-					// Convert date strings back to Date objects
 					const processedWorkspaces = workspaces.map((workspace) => ({
 						...workspace,
 						createdAt: new Date(workspace.createdAt),
@@ -118,7 +117,6 @@ export const useWorkspaceStore = create<WorkspaceStoreState>()(
 					return;
 				}
 
-				// Set initial launch state
 				set((state) => ({
 					workspaceStatuses: {
 						...state.workspaceStatuses,
@@ -135,7 +133,6 @@ export const useWorkspaceStore = create<WorkspaceStoreState>()(
 					},
 				}));
 
-				// Setup event listeners for launch progress
 				const unlistenProgress = await listen(
 					"workspace-launch-progress",
 					(event) => {
@@ -189,14 +186,12 @@ export const useWorkspaceStore = create<WorkspaceStoreState>()(
 							);
 						}
 
-						// Clean up listeners
 						unlistenProgress();
 						unlistenComplete();
 					},
 				);
 
 				try {
-					// Convert workspace apps to the format expected by Tauri
 					const tauriApps = workspace.apps.map((app) => ({
 						id: app.id,
 						name: app.name,
@@ -210,21 +205,18 @@ export const useWorkspaceStore = create<WorkspaceStoreState>()(
 					console.error("Failed to launch workspace:", error);
 					toast.error("Failed to launch workspace");
 
-					// Reset status on error
 					get().updateWorkspaceStatus(id, {
 						isRunning: false,
 						runningApps: [],
 						launchProgress: undefined,
 					});
 
-					// Clean up listeners
 					unlistenProgress();
 					unlistenComplete();
 				}
 			},
 
 			stopWorkspace: async (id) => {
-				// For now, just update the status - stopping processes is more complex
 				set((state) => ({
 					workspaceStatuses: {
 						...state.workspaceStatuses,
@@ -253,7 +245,6 @@ export const useWorkspaceStore = create<WorkspaceStoreState>()(
 		}),
 		{
 			name: "workspace-store",
-			// Only persist workspaces, not statuses
 			partialize: (state) => ({ workspaces: state.workspaces }),
 		},
 	),
